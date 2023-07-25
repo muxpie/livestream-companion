@@ -1,0 +1,50 @@
+<mvc:View controllerName="myApp.controller.Categories" xmlns:m="sap.m" xmlns:mvc="sap.ui.core.mvc" displayBlock="true">
+    <m:Page title="Categories" busy="{categoriesModel>/busy}">
+        <m:VBox class="tableContainer sapUiResponsiveContentPadding">
+            <m:HBox justifyContent="SpaceBetween" wrap="Wrap">
+                <m:HBox justifyContent="Start" wrap="Wrap">
+                    <m:VBox class="sapUiSmallMarginEnd">
+                        <m:Label text="Playlist"/>
+                        <m:ComboBox id="playlistSelect" 
+                                    change=".onPlaylistSelectChange" 
+                                    placeholder="Select Playlist"/>
+                    </m:VBox>
+                </m:HBox>
+                <m:VBox class="sapUiSmallMarginEnd">
+                    <m:Label text="Search"/>
+                    <m:SearchField liveChange=".onLiveSearch" width="100%" placeholder="Search..."/>
+                </m:VBox>
+            </m:HBox>
+
+            <m:Table id="categoriesTable" items="{categoriesModel>/}" busyIndicatorDelay="{= ${categoriesModel>/busy} ? 0 : 1000}">
+              <m:ColumnListItem>
+                <m:Text text="{categoriesModel>category_id}" />
+                <m:Text text="{categoriesModel>category_name}" />
+                <m:HBox>
+                  <m:Button icon="{= ${categoriesModel>Active} ? 'sap-icon://accept' : 'sap-icon://decline' }" 
+                            press=".onToggleActive" 
+                            tooltip="{= ${categoriesModel>Active} ? 'Active - click to deactivate' : 'Inactive - click to activate' }"/>
+                </m:HBox>
+              </m:ColumnListItem>
+              <m:columns>
+                <m:Column minScreenWidth="Tablet" demandPopin="true">
+                  <m:Label text="ID" />
+                </m:Column>
+                <m:Column minScreenWidth="Tablet" demandPopin="true">
+                  <m:Label text="Category Name" />
+                </m:Column>
+                <m:Column minScreenWidth="Tablet" demandPopin="true">
+                  <m:Label text="Status" />
+                </m:Column>
+              </m:columns>
+            </m:Table>
+        </m:VBox>
+        <m:footer>
+          <m:Toolbar>
+            <m:ToolbarSpacer />
+            <m:Button text="Deactivate All" type="Reject" press=".onDeactivateAll" class="" />
+            <m:Button text="Activate All" type="Accept" press=".onActivateAll" class="" />
+          </m:Toolbar>
+        </m:footer>
+    </m:Page>
+</mvc:View>

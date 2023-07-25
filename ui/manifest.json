@@ -1,0 +1,127 @@
+{
+  "_version": "1.12.0",
+  "sap.app": {
+    "id": "myApp",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "1.0.0"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "dataSources": {}
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    },
+    "supportedThemes": [
+      "sap_belize",
+      "sap_horizon"
+    ]
+  },
+  "sap.ui5": {
+    "flexEnabled": false,
+    "rootView": {
+      "viewName": "myApp.view.App",
+      "type": "XML",
+      "async": true,
+      "id": "app"
+    },
+    "dependencies": {
+      "minUI5Version": "1.60",
+      "libs": {
+        "sap.ui.core": {},
+        "sap.m": {},
+        "sap.ui.layout": {},
+        "sap.tnt": {}
+      }
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "myApp.i18n.i18n"
+        }
+      }
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "viewPath": "myApp.view",
+        "controlId": "myPage",
+        "controlAggregation": "pages",
+        "transition": "slide",
+        "async": true
+      },
+      "routes": [
+        {
+          "pattern": "",
+          "name": "home",
+          "target": "targetHome"
+        },
+        {
+          "name": "Playlists",
+          "pattern": "Playlists",
+          "target": "targetPlaylists"
+        },
+        {
+          "pattern": "PlaylistDetail/{playlistId}",
+          "name": "PlaylistDetail",
+          "target": ["PlaylistDetail"]
+        },
+        {
+          "name": "Categories",
+          "pattern": "Categories",
+          "target": "targetCategories"
+        },
+        {
+          "name": "Channels",
+          "pattern": "Channels",
+          "target": "targetChannels"
+        }
+      ],
+      "targets": {
+        "targetHome": {
+          "viewName": "Home",
+          "viewLevel": 1
+        },
+        "targetPlaylists": {
+          "viewName": "Playlists",
+          "viewLevel": 2
+        },
+        "PlaylistDetail": {
+          "viewName": "PlaylistDetail",
+          "viewLevel": 2
+        },
+        "targetCategories": {
+          "viewName": "Categories",
+          "viewLevel": 2
+        },
+        "targetChannels": {
+          "viewName": "Channels",
+          "viewLevel": 3
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    }
+  }
+}

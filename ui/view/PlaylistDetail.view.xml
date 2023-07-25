@@ -1,0 +1,55 @@
+<mvc:View
+    controllerName="myApp.controller.PlaylistDetail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:m="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    displayBlock="true"
+>
+    <m:Page title="Edit Playlist">
+        <f:SimpleForm id="playlistForm" editable="true" layout="ResponsiveGridLayout">
+            <f:content>
+                <m:Label text="ID" visible="{= ${/ID} !== ''}"/>
+                <m:Input value="{/ID}" visible="{= ${/ID} !== ''}" editable="false"/>
+
+                <m:Label text="Description" />
+                <m:Input value="{/Description}" />
+
+                <m:Label text="Type"/>
+                <m:Select selectedKey="{/Type}" items="{typeModel>/}">
+                    <core:Item key="{typeModel>key}" text="{typeModel>text}"/>
+                </m:Select>
+
+                <m:Label text="M3U URL" visible="{= ${/Type} === 'm3u'}"/>
+                <m:Input value="{/M3uURL}" visible="{= ${/Type} === 'm3u'}" editable="true"/>
+
+                <m:Label text="Server" visible="{= ${/Type} === 'xcode'}"/>
+                <m:Input value="{/Server}" visible="{= ${/Type} === 'xcode'}" editable="true"/>
+
+                <m:Label text="Username" visible="{= ${/Type} === 'xcode'}" />
+                <m:Input value="{/Username}" visible="{= ${/Type} === 'xcode'}" editable="true"/>
+
+                <m:Label text="Password" visible="{= ${/Type} === 'xcode'}" />
+                <m:Input value="{/Password}" visible="{= ${/Type} === 'xcode'}" editable="true"/>
+
+                <m:Label text="XMLTV URL" visible="{= ${/Type} === 'xcode' || ${/Type} === 'm3u'}" />
+                <m:Input id="xmltvURL" value="{/XmltvURL}" editable="true" showValueHelp="true" valueHelpRequest=".onBuildXmltvUrl" visible="{= ${/Type} === 'xcode' || ${/Type} === 'm3u'}" />
+
+                <m:Label text="Restream" />
+                <m:VBox>
+                    <m:CheckBox selected="{/Restream}" />
+                    <m:MessageStrip class="sapUiTinyMarginTop" type="Info" showIcon="true"
+                        text="Restream enhances compatibility by transforming the stream into the format recognized by Plex and Emby, so it's generally advisable to keep it activated." />
+                </m:VBox>
+
+            </f:content>
+        </f:SimpleForm>
+        <m:footer>
+          <m:Toolbar>
+            <m:ToolbarSpacer />
+              <m:Button text="Save" type="Emphasized" press=".onSave" />
+              <m:Button text="Cancel" type="Transparent" press=".onCancel" />
+          </m:Toolbar>
+        </m:footer>
+    </m:Page>
+</mvc:View>

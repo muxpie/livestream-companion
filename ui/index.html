@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8" />
+
+    <title>Admin Page</title>
+
+    <script
+      id="sap-ui-bootstrap"
+      src="https://openui5.hana.ondemand.com/resources/sap-ui-core.js"
+      data-sap-ui-theme="sap_fiori_3_dark"
+      data-sap-ui-libs="sap.m,sap.tnt"
+      data-sap-ui-async="true"
+      data-sap-ui-compatVersion="edge"
+      data-sap-ui-resourceroots='{"myApp": "./"}'
+    ></script>
+
+    <script>
+      sap.ui.getCore().attachInit(function() {
+        new sap.ui.core.ComponentContainer({
+          name: "myApp"
+        }).placeAt("content");
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+  </head>
+
+  <body class="sapUiBody" id="content">
+    <!-- Content is added here by SAPUI5 -->
+  </body>
+</html>

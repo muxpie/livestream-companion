@@ -1,0 +1,38 @@
+<mvc:View controllerName="myApp.controller.App"
+          xmlns:mvc="sap.ui.core.mvc"
+          xmlns:m="sap.m"
+          xmlns:tnt="sap.tnt"
+          displayBlock="true">
+  <tnt:ToolPage id="ToolPage">
+    <tnt:header>
+      <tnt:ToolHeader id="ToolHeader">
+        <m:Button icon="sap-icon://menu2" press="onSideNavButtonPress" />
+        <m:Title text="MuxPie LiveStream Companion"/>
+        <m:ToolbarSpacer />
+        <!-- Server Address -->
+        <m:Label text="Server Address:"></m:Label>
+        <m:Button icon="sap-icon://copy" tooltip="Copy server address" press=".onCopyServerAddress" />
+        <!-- XMLTV Link Address -->
+        <m:Label text="XMLTV:"></m:Label>
+        <m:Button icon="sap-icon://copy" tooltip="Copy XMLTV link address" press=".onCopyXmltvLink" />
+    </tnt:ToolHeader>
+
+
+    </tnt:header>
+    <tnt:sideContent>
+      <tnt:SideNavigation id="SideNavigation" itemSelect="onItemSelect" selectedItem="{/selectedItem}">
+        <tnt:item>
+          <tnt:NavigationList id="NavigationList">
+            <tnt:NavigationListItem text="Home" icon="sap-icon://home" />
+            <tnt:NavigationListItem text="Playlists" icon="sap-icon://list" />
+            <tnt:NavigationListItem text="Categories" icon="sap-icon://multiselect-all" />
+            <tnt:NavigationListItem text="Channels" icon="sap-icon://sys-monitor" />
+          </tnt:NavigationList>
+        </tnt:item>
+      </tnt:SideNavigation>
+    </tnt:sideContent>
+    <tnt:mainContents>
+      <m:App id="myPage" />
+    </tnt:mainContents>
+  </tnt:ToolPage>
+</mvc:View>

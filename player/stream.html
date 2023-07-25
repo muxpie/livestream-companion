@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stream Player</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #000;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <video id="videoElement" controls autoplay width="640"></video>
+  <script src="https://cdn.jsdelivr.net/npm/mpegts.js/dist/mpegts.min.js"></script>
+  <script>
+    // This will extract the channel ID from the URL parameters
+    var urlParams = new URLSearchParams(window.location.search);
+    var channelId = urlParams.get('channel');
+    if (channelId && mpegts.getFeatureList().mseLivePlayback) {
+        var videoElement = document.getElementById('videoElement');
+        var player = mpegts.createPlayer({
+            type: 'mpegts',  // could also be mpegts, m2ts, flv
+            isLive: true,
+            // Use the channelId in the stream URL
+            url: '/hls/' + channelId + '.ts?webbrowser=true'
+        });
+
+        player.attachMediaElement(videoElement);
+
+        player.load();
+        player.play();
+    }
+  </script>
+</body>
+</html>

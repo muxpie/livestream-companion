@@ -1,0 +1,65 @@
+<mvc:View controllerName="myApp.controller.Channels" xmlns:m="sap.m" xmlns:mvc="sap.ui.core.mvc" displayBlock="true">
+    <m:Page title="Channels" busy="{channelsModel>/busy}">
+        <m:VBox class="tableContainer sapUiResponsiveContentPadding">
+            <m:HBox justifyContent="SpaceBetween" wrap="Wrap">
+                <m:HBox justifyContent="Start" wrap="Wrap">
+                    <m:VBox class="sapUiSmallMarginEnd">
+                        <m:Label text="Playlist"/>
+                        <m:ComboBox id="playlistSelect" 
+                                    change=".onPlaylistSelectChange" 
+                                    placeholder="Select Playlist"/>
+                    </m:VBox>
+                    <m:VBox class="sapUiSmallMarginEnd">
+                        <m:Label text="Category"/>
+                        <m:ComboBox id="categorySelect" 
+                                    change=".onCategorySelectChange" 
+                                    placeholder="Select Category"/>
+                    </m:VBox>
+                </m:HBox>
+                <m:VBox class="sapUiSmallMarginEnd">
+                    <m:Label text="Search"/>
+                    <m:SearchField liveChange=".onLiveSearch" width="100%" placeholder="Search..."/>
+                </m:VBox>
+            </m:HBox>
+            <m:Table id="channelsTable" 
+                    items="{channelsModel>/}" 
+                    busyIndicatorDelay="{= ${channelsModel>/busy} ? 0 : 1000}" 
+                    growing="true" 
+                    growingScrollToLoad="true"
+                    growingThreshold="50">
+                <m:ColumnListItem >
+                    <m:Text text="{channelsModel>ID}" />
+                    <m:Text text="{channelsModel>name}" />
+                    <m:HBox>
+                        <m:Button icon="{= ${channelsModel>Active} ? 'sap-icon://accept' : 'sap-icon://decline' }" 
+                                press=".onToggleActive" 
+                                tooltip="{= ${channelsModel>Active} ? 'Active - click to deactivate' : 'Inactive - click to activate' }"/>
+                    </m:HBox>
+                    <m:Button icon="sap-icon://media-play" press=".onChannelPress"/>
+                </m:ColumnListItem>
+                <m:columns>
+                    <m:Column minScreenWidth="Tablet" demandPopin="true">
+                        <m:Label text="ID" />
+                    </m:Column>
+                    <m:Column minScreenWidth="Tablet" demandPopin="true">
+                        <m:Label text="Channel Name" />
+                    </m:Column>
+                    <m:Column minScreenWidth="Tablet" demandPopin="true">
+                        <m:Label text="Status" />
+                    </m:Column>
+                    <m:Column minScreenWidth="Tablet" demandPopin="true">
+                        <m:Label text="Play Stream" />
+                    </m:Column>
+
+                </m:columns>
+            </m:Table>
+        </m:VBox>
+        <m:footer>
+            <m:Toolbar>
+                <m:ToolbarSpacer />
+                <m:Button text="Deactivate All" type="Reject" press=".onDeactivateAll" class="" />
+                <m:Button text="Activate All" type="Accept" press=".onActivateAll" class="" />
+            </m:Toolbar>
+        </m:footer>
+    </m:Page>
+</mvc:View>

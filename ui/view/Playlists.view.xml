@@ -1,0 +1,55 @@
+<mvc:View controllerName="myApp.controller.Playlists" xmlns:m="sap.m" xmlns:mvc="sap.ui.core.mvc" displayBlock="true">
+  <m:Page title="Playlists" busy="{playlistModel>/busy}">
+    <m:VBox class="tableContainer sapUiResponsiveContentPadding">
+      <m:Table id="playlistTable" items="{playlistModel>/}" busyIndicatorDelay="{= ${playlistModel>/busy} ? 0 : 1000}" class="">
+        <m:ColumnListItem>
+          <m:Text text="{playlistModel>ID}" />
+          <m:Text text="{playlistModel>Description}" />
+          <m:Text text="{playlistModel>Type}" />
+          <m:HBox>
+            <m:Button icon="sap-icon://edit" tooltip="Edit" press=".onEdit" class="sapUiTinyMarginEnd" />
+            <m:Button icon="sap-icon://delete" tooltip="Delete" type="Reject" press=".onDelete" />
+          </m:HBox>
+          <m:HBox>
+            <m:Button icon="{parts: ['playlistModel>ImportStatus'], formatter: '.formatter.getImportStatusIcon'}"
+                      tooltip="{parts: ['playlistModel>ImportStatus'], formatter: '.formatter.getImportStatusTooltip'}"
+                      press=".onRetriggerImport"
+                      enabled="{= ${playlistModel>ImportStatus} === 2 || ${playlistModel>ImportStatus} === -1}" />
+          </m:HBox>
+          <m:HBox>
+            <m:Button icon="{parts: ['playlistModel>EpgStatus', 'playlistModel>EPGLastProcessedAt'], formatter: '.formatter.getEpgStatusIcon'}"
+                      tooltip="{parts: ['playlistModel>EpgStatus', 'playlistModel>EPGLastProcessedAt'], formatter: '.formatter.getEpgStatusTooltip'}"
+                      press=".onRetriggerEPG"
+                      enabled="{= ${playlistModel>EpgStatus} === 2 || ${playlistModel>EpgStatus} === -1}" />
+          </m:HBox>
+        </m:ColumnListItem>
+        <m:columns>
+          <m:Column minScreenWidth="Tablet" demandPopin="true">
+            <m:Label text="ID" />
+          </m:Column>
+          <m:Column minScreenWidth="Tablet" demandPopin="true">
+            <m:Label text="Description" />
+          </m:Column>
+          <m:Column minScreenWidth="Tablet" demandPopin="true">
+            <m:Label text="Type" />
+          </m:Column>
+          <m:Column minScreenWidth="Tablet" demandPopin="true">
+            <m:Label text="Actions" />
+          </m:Column>
+          <m:Column minScreenWidth="Tablet" demandPopin="true">
+            <m:Label text="Import Status" />
+          </m:Column>
+          <m:Column minScreenWidth="Tablet" demandPopin="true">
+            <m:Label text="EPG Status" />
+          </m:Column>
+        </m:columns>
+      </m:Table>
+    </m:VBox>
+    <m:footer>
+      <m:Toolbar>
+        <m:ToolbarSpacer />
+        <m:Button text="Add New" type="Emphasized" press=".onAdd" class="" />
+      </m:Toolbar>
+    </m:footer>
+  </m:Page>
+</mvc:View>

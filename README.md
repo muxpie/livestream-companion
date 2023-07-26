@@ -13,7 +13,7 @@ The tool is designed with simplicity and convention over configuration in mind. 
 You can run MuxPie LiveStream Companion using Docker with the following command:
 
 ```bash
-docker run -p 8080:8080 -v /path/to/config:/app/config your_dockerhub_username/muxpie
+docker run -p 5004:5004 -v /path/to/data:/data muxpie/livestream-companion
 ```
 
 Please replace `/path/to/config` with the path to the folder containing your configuration files.

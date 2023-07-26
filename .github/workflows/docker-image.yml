@@ -1,13 +1,10 @@
-name: Docker Image CI
-
+name: Dockerize App
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
 jobs:
-
   build-container:
     name: Build Docker Container Image
     runs-on: ubuntu-latest
@@ -20,4 +17,4 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: muxpie/livestream-companion
-        tasg: latest, ${{ github.run_number }}
+        tags: latest, ${{ github.run_number }}

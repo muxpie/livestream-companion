@@ -1,4 +1,4 @@
-name: Dockerize App
+name: Build and Deploy
 on:
   push:
     branches: [ "main" ]

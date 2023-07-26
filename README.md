@@ -1,4 +1,4 @@
-# MuxPie LiveStream Companion
+# MuxPie LiveStream Companion &middot; ![Dockerize App](https://github.com/muxpie/livestream-companion/actions/workflows/docker-image.yml/badge.svg)
 
 ## Overview
 

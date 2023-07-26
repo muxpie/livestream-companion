@@ -2,9 +2,9 @@ package hdhr
 
 import (
 	"fmt"
+	"livestream-companion/management"
 	"net/http"
 	"strconv"
-	"tunerTV/management"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"

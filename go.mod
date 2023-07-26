@@ -1,4 +1,4 @@
-module tunerTV
+module livestream-companion
 
 go 1.19
 

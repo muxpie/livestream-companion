@@ -2,11 +2,11 @@ package management
 
 import (
 	"context"
+	"livestream-companion/stream"
 	"net/http"
 	"path/filepath"
 	"strconv"
 	"strings"
-	"tunerTV/stream"
 
 	"github.com/gin-gonic/gin"
 )

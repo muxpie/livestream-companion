@@ -1,9 +1,9 @@
 package main
 
 import (
+	"livestream-companion/management"
+	"livestream-companion/routes"
 	"time"
-	"tunerTV/management"
-	"tunerTV/routes"
 )
 
 func main() {

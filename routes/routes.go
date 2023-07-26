@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"tunerTV/hdhr"
-	"tunerTV/management"
+	"livestream-companion/hdhr"
+	"livestream-companion/management"
 
 	"github.com/gin-gonic/gin"
 )

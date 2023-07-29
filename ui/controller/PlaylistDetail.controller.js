@@ -12,10 +12,10 @@ sap.ui.define([
 
       var oTypeModel = new JSONModel([{
         key: "xcode",
-        text: "xcode"
+        text: "Xtream Code"
       }, {
         key: "m3u",
-        text: "m3u (comming soon)"
+        text: "M3U"
       }]);
       this.getView().setModel(oTypeModel, "typeModel");
 

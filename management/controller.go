@@ -51,7 +51,7 @@ func InsertPlaylistHandler(c *gin.Context) {
 		return
 	}
 
-	go ImportXtream(playlist.ID)
+	go ImportXtream(c, playlist.ID)
 
 	c.JSON(http.StatusOK, playlist)
 }
@@ -85,7 +85,7 @@ func UpdatePlaylistByIDHandler(c *gin.Context) {
 		return
 	}
 
-	go ImportXtream(playlist.ID)
+	go ImportXtream(c, playlist.ID)
 
 	c.JSON(http.StatusOK, playlist)
 }

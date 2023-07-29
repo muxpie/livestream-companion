@@ -54,7 +54,7 @@ type Channel struct {
 	Category           Category `gorm:"foreignKey:CategoryID"`
 	ExternalCategoryID string   `gorm:"index" json:"category_id"`
 	StreamID           int      `json:"stream_id"`
-	StreamURL          string   `gorm:"streamurl"`
+	StreamURL          string   `gorm:"streamurl" json:"stream_url"`
 	EpgChannelID       string   `json:"epg_channel_id"`
 	HDHRChannelNum     int
 	StreamIcon         string `json:"stream_icon"`

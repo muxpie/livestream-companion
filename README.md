@@ -4,7 +4,7 @@
 
 MuxPie LiveStream Companion is a robust and versatile streaming tool designed to enhance your viewing experience. It is primarily intended as a multiplexer for Plex and Emby, and can also be used as a web player for quick and straightforward streaming.
 
-The tool is designed with simplicity and convention over configuration in mind. This means you spend less time configuring settings and more time enjoying your favorite content. MuxPie LiveStream Companion currently supports XCode for streaming and will soon add support for m3u8.
+The tool is designed with simplicity and convention over configuration in mind. This means you spend less time configuring settings and more time enjoying your favorite content. MuxPie LiveStream Companion supports both Xtream Code and m3u.
 
 ## Installation
 

@@ -58,6 +58,9 @@ func SetupRouter() *gin.Engine {
 	r.GET("/api/categories/:category_id/channels", management.GetChannelsByCategoryIdHandler)
 	r.GET("/api/channel/:id/programmes", management.GetProgrammesByChannelIDHandler)
 
+	r.GET("/api/m3u/categories/:playlistID", management.M3uCategoryHandler)
+	r.GET("/api/m3u/channels/:playlistID", management.M3uChannelHandler)
+
 	r.GET("/hls/*path", management.StreamHandler)
 	r.GET("/xmltv", management.GetEPG)
 

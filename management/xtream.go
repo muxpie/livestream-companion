@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
@@ -17,7 +18,7 @@ type CategoryInfo struct {
 	CategoryName string
 }
 
-func ImportXtream(ID uint) {
+func ImportXtream(c *gin.Context, ID uint) {
 	playlist, err := GetPlaylistByID(ID)
 	if err != nil {
 		log.Print(err)
@@ -38,7 +39,20 @@ func ImportXtream(ID uint) {
 	username := playlist.Username
 	password := playlist.Password
 
-	categoryListURL := fmt.Sprintf("%s/player_api.php?username=%s&password=%s&action=get_live_categories", baseURL, username, password)
+	scheme := "http"
+	if forwardedProto := c.GetHeader("X-Forwarded-Proto"); forwardedProto != "" {
+		scheme = forwardedProto
+	} else if c.Request.TLS != nil {
+		scheme = "https"
+	}
+
+	var categoryListURL string
+	if playlist.Type == "m3u" {
+		categoryListURL = fmt.Sprintf("%s://%s/api/m3u/categories/%d", scheme, c.Request.Host, ID)
+	} else {
+		categoryListURL = fmt.Sprintf("%s/player_api.php?username=%s&password=%s&action=get_live_categories", baseURL, username, password)
+	}
+
 	categoryListResp, err := http.Get(categoryListURL)
 	if err != nil {
 		log.Print(err)
@@ -64,7 +78,13 @@ func ImportXtream(ID uint) {
 		return
 	}
 
-	streamListURL := fmt.Sprintf("%s/player_api.php?username=%s&password=%s&action=get_live_streams", baseURL, username, password)
+	var streamListURL string
+	if playlist.Type == "m3u" {
+		streamListURL = fmt.Sprintf("%s://%s/api/m3u/channels/%d", scheme, c.Request.Host, ID)
+	} else {
+		streamListURL = fmt.Sprintf("%s/player_api.php?username=%s&password=%s&action=get_live_streams", baseURL, username, password)
+	}
+
 	streamListResp, err := http.Get(streamListURL)
 	if err != nil {
 		log.Print(err)
@@ -185,7 +205,11 @@ func ImportXtream(ID uint) {
 			dbChannel.CategoryID = category.ID
 			dbChannel.ExternalCategoryID = channel.ExternalCategoryID
 			dbChannel.StreamID = channel.StreamID
-			dbChannel.StreamURL = fmt.Sprintf("%s/live/%s/%s/%d.m3u8", baseURL, username, password, channel.StreamID)
+			if playlist.Type == "m3u" {
+				dbChannel.StreamURL = channel.StreamURL
+			} else {
+				dbChannel.StreamURL = fmt.Sprintf("%s/live/%s/%s/%d.m3u8", baseURL, username, password, channel.StreamID)
+			}
 			dbChannel.EpgChannelID = channel.EpgChannelID
 			dbChannel.HDHRChannelNum = hdhrChannelNum
 			dbChannel.StreamIcon = channel.StreamIcon
@@ -210,7 +234,11 @@ func ImportXtream(ID uint) {
 			dbChannel.CategoryID = category.ID
 			dbChannel.ExternalCategoryID = channel.ExternalCategoryID
 			dbChannel.StreamID = channel.StreamID
-			dbChannel.StreamURL = fmt.Sprintf("%s/live/%s/%s/%d.m3u8", baseURL, username, password, channel.StreamID)
+			if playlist.Type == "m3u" {
+				dbChannel.StreamURL = channel.StreamURL
+			} else {
+				dbChannel.StreamURL = fmt.Sprintf("%s/live/%s/%s/%d.m3u8", baseURL, username, password, channel.StreamID)
+			}
 			dbChannel.EpgChannelID = channel.EpgChannelID
 			dbChannel.HDHRChannelNum = hdhrChannelNum
 			dbChannel.StreamIcon = channel.StreamIcon
@@ -233,7 +261,7 @@ func ImportXtream(ID uint) {
 	}
 
 	DB.Delete(&Category{}, "playlist_id = ? and updated_at < ?", ID, startTime)
-	DB.Delete(&Channel{}, "playlist_id = ? and updated_at < ?", ID, startTime)
+	DB.Where("category_id IN (SELECT id FROM categories WHERE playlist_id = ?) AND updated_at < ?", ID, startTime).Delete(&Channel{})
 
 	UpdateHDHRChannelNumForAllChannels()
 	playlist.ImportStatus = 2

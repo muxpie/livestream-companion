@@ -1,5 +1,7 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tooltip } from '@mui/material';
+import React, { useEffect, useContext,useState,  useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tooltip, Typography, Toolbar } from '@mui/material';
+import { SnackbarContext } from './SnackbarContext';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
@@ -8,10 +10,13 @@ import InProgressIcon from '@mui/icons-material/Update';
 import AcceptIcon from '@mui/icons-material/Check';
 import DeclineIcon from '@mui/icons-material/Clear';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+
 import axios from 'axios';
 
-const DeleteButton = ({ playlistId, onDeletion }) => {
-  const [open, setOpen] = React.useState(false);
+const DeleteButton = ({ playlistId, onDeletion, onSnackbarOpen }) => {
+  const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -24,8 +29,8 @@ const DeleteButton = ({ playlistId, onDeletion }) => {
   const handleDelete = async () => {
     try {
       await axios.delete(`/api/playlist/${playlistId}`);
-      alert('Playlist successfully deleted');
-      onDeletion();  // trigger the parent to reload the data
+      onSnackbarOpen('Playlist successfully deleted!');
+      onDeletion();
     } catch (err) {
       alert('Failed to delete the playlist');
     }
@@ -90,24 +95,39 @@ const ImportStatusButton = ({ importStatus, handlePress }) => {
   );
 };
 
+const EPGStatusButton = ({ epgStatus, handlePress }) => {
+  return (
+    <Tooltip title={getTooltipByStatus(epgStatus)}>
+      <IconButton color="primary" onClick={handlePress}>
+        {getIconByStatus(epgStatus)}
+      </IconButton>
+    </Tooltip>
+  );
+};
+
 const PlaylistTable = () => {
   const [rows, setRows] = useState([]);
+  const navigate = useNavigate();
 
   const fetchPlaylists = async () => {
     const response = await fetch('/api/playlists');
     return response.json();
   };
 
-  // Function to update the playlist data and check the import status
   const refreshPlaylists = useCallback(async () => {
     let playlists = await fetchPlaylists();
     setRows(playlists);
 
-    // Check if any playlist is in importing state (0 or 1)
-    let isImporting = playlists.some(playlist => [0, 1].includes(playlist.ImportStatus));
+    let isImporting = playlists.some(playlist => {
+      if ([0, 1].includes(playlist.ImportStatus)) {
+        return true; // Continue checking if ImportStatus is 0 or 1
+      } else if (playlist.ImportStatus === 2) {
+        return [0, 1].includes(playlist.EpgStatus); // Continue checking if ImportStatus is 2 and EpgStatus is 0 or 1
+      }
+      return false; 
+    });    
     
     if (isImporting) {
-      // Wait for 2 seconds and then re-run the refreshPlaylists function
       setTimeout(refreshPlaylists, 2000);
     }
   }, []);
@@ -116,16 +136,27 @@ const PlaylistTable = () => {
     refreshPlaylists();
   }, [refreshPlaylists]);
 
-  const handleEdit = (row) => {
-    // Handle edit action...
+  const handleDeletion = (message) => {
+    openSnackbar(message);
+  };
+
+  const handleEdit = (playlistId) => {
+    navigate(`/playlists/${playlistId}`);
+  };
+
+  const handleAddNew = () => {
+    navigate("/playlists/new");
   };
 
   const handleDelete = (row) => {
     // Handle delete action...
   };
 
+  const { openSnackbar } = useContext(SnackbarContext);
+
   return (
     <Box>
+      <Typography variant="h5" sx={{ marginBottom: 10, fontWeight: 'bold' }}>Playlists</Typography>
       <TableContainer component={Paper}>
         <Table >
           <TableHead>
@@ -145,28 +176,30 @@ const PlaylistTable = () => {
                 <TableCell>{row.Description}</TableCell>
                 <TableCell>{row.Type}</TableCell>
                 <TableCell>
-                  <IconButton color="primary" onClick={() => handleEdit(row)}>
+                  <IconButton color="primary" onClick={() => handleEdit(row.ID)}>
                     <EditIcon />
                   </IconButton>
-                  <DeleteButton playlistId={row.ID} onDeletion={refreshPlaylists} />
+                  <DeleteButton playlistId={row.ID} onDeletion={refreshPlaylists} onSnackbarOpen={handleDeletion} />
                 </TableCell>
                 <TableCell>
-                  <IconButton color="primary" onClick={() => handleDelete(row)}>
-                    <SearchIcon />
-                  </IconButton>
                   <ImportStatusButton importStatus={row.ImportStatus} />
                 </TableCell>
                 <TableCell>
-                  <IconButton color="primary" onClick={() => handleDelete(row)}>
-                    <SearchIcon />
-                  </IconButton>
+                  <EPGStatusButton epgStatus={row.EpgStatus} />
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+        <Fab
+          color="primary"
+          aria-label="Add New Playlist"
+          sx={{ position: 'fixed', bottom: 16, right: 16 }}
+          onClick={handleAddNew}
+        >
+          <AddIcon />
+        </Fab>
       </TableContainer>
-      <Button variant="contained" >Add New</Button>
     </Box>
   );
 };

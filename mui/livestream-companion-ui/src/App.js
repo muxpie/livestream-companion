@@ -1,4 +1,5 @@
-import React, { useCallback } from 'react';
+import React, { useContext, useState, useCallback } from 'react';
+import { SnackbarProvider, SnackbarContext } from './SnackbarContext';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
@@ -23,6 +24,9 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import { BrowserRouter as Router, Routes, Route, Link as RouterLink } from 'react-router-dom';
 import Playlist from './Playlist';
+import PlaylistDetail from './PlaylistDetail';
+import Category from './Category';
+import Channel from './Channel';
 
 const drawerWidth = 240;
 
@@ -51,33 +55,30 @@ const copyToClipboard = async (text) => {
 };
 
 export default function App() {
+  return (
+    <SnackbarProvider>
+      <AppContent />
+    </SnackbarProvider>
+  );
+}
+
+function AppContent() {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
-  const [drawerOpen, setDrawerOpen] = React.useState(true);
-  const [openSnackbar, setOpenSnackbar] = React.useState(false);
-  const [snackbarMessage, setSnackbarMessage] = React.useState('');
-
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpenSnackbar(false);
-  };
+  const [drawerOpen, setDrawerOpen] = useState(true);
+  const { openSnackbar } = useContext(SnackbarContext);
 
   const onCopyServerAddress = useCallback(() => {
     const serverAddress = window.location.origin;
     copyToClipboard(serverAddress);
-    setSnackbarMessage('Server address copied to clipboard!');
-    setOpenSnackbar(true);
-  }, []);
+    openSnackbar('Server address copied to clipboard!');
+  }, [openSnackbar]);
 
   const onCopyXmltvLink = useCallback(() => {
     const xmltvLink = window.location.origin + "/xmltv";
     copyToClipboard(xmltvLink);
-    setSnackbarMessage('XMLTV link copied to clipboard!');
-    setOpenSnackbar(true);
-  }, []);
+    openSnackbar('XMLTV link copied to clipboard!');
+  }, [openSnackbar]);
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
@@ -111,13 +112,13 @@ export default function App() {
           </ListItemIcon>
           <ListItemText primary="Playlists" />
         </ListItem>
-        <ListItem button>
+        <ListItem button component={RouterLink} to="/categories">
           <ListItemIcon>
             <CategoryIcon color="primary" />
           </ListItemIcon>
           <ListItemText primary="Categories" />
         </ListItem>
-        <ListItem button>
+        <ListItem button component={RouterLink} to="/channels">
           <ListItemIcon>
             <TvIcon color="primary" />
           </ListItemIcon>
@@ -147,7 +148,7 @@ export default function App() {
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography variant="body1" sx={{ marginRight: 1 }}>Server Address:</Typography>
                 <Tooltip title="Copy Server Address">
-                  <IconButton color="inherit" onClick={() => {onCopyServerAddress()}}>
+                  <IconButton color="inherit" onClick={onCopyServerAddress}>
                     <FileCopyIcon />
                   </IconButton>
                 </Tooltip>
@@ -155,7 +156,7 @@ export default function App() {
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography variant="body1" sx={{ marginRight: 1 }}>XMLTV Address:</Typography>
                 <Tooltip title="Copy XMLTV Link Address">
-                  <IconButton color="inherit" onClick={() => { onCopyXmltvLink() }}>
+                  <IconButton color="inherit" onClick={onCopyXmltvLink}>
                     <FileCopyIcon />
                   </IconButton>
                 </Tooltip>
@@ -190,13 +191,22 @@ export default function App() {
           <Toolbar /> {/* This is necessary to offset content below AppBar */}
           <Routes>
             <Route path="/playlists" element={<Playlist />} />
+            <Route path="/playlists/new" element={<PlaylistDetail />} />
+            <Route path="/playlists/:id" element={<PlaylistDetail />} />
+            <Route path="/categories" element={<Category />} />
+            <Route path="/channels" element={<Channel />} />
           </Routes>
         </Box>
-        <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-        <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
-          {snackbarMessage}
-        </Alert>
-        </Snackbar> 
+
+        <SnackbarContext.Consumer>
+          {({ snackbarOpen, snackbarMessage, closeSnackbar }) => (
+            <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={closeSnackbar}>
+              <Alert onClose={closeSnackbar} severity="success" sx={{ width: '100%' }}>
+                {snackbarMessage}
+              </Alert>
+            </Snackbar>
+          )}
+        </SnackbarContext.Consumer>
       </Box>
     </Router>
   );

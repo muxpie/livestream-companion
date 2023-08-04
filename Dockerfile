@@ -25,6 +25,7 @@ RUN CGO_ENABLED=1 GOOS=linux go build -a -installsuffix cgo -o main .
 
 # Download all dependencies. Dependencies will be cached if the go.mod and the go.sum files are not changed 
 WORKDIR /app/mui/livestream-companion-ui
+RUN npm install
 RUN npm run build 
 RUN mv build /app/ui
 

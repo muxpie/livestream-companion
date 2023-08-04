@@ -3,6 +3,9 @@ package routes
 import (
 	"livestream-companion/hdhr"
 	"livestream-companion/management"
+	"net/http"
+	"path/filepath"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,7 +28,23 @@ func SetupRouter() *gin.Engine {
 	r.GET("/", func(c *gin.Context) {
 		c.Redirect(302, "/ui")
 	})
+
+	// Serve static files for /mui
 	r.Static("/ui", "./ui")
+
+	// Handle any other routes by checking if they start with /mui
+	r.NoRoute(func(c *gin.Context) {
+		if strings.HasPrefix(c.Request.URL.Path, "/ui") {
+			if filepath.Ext(c.Request.URL.Path) == "" {
+				c.File("./ui/index.html")
+			} else {
+				c.Status(http.StatusNotFound)
+			}
+		} else {
+			// Handle other unknown routes as you see fit
+			c.Status(http.StatusNotFound)
+		}
+	})
 	r.Static("/player", "./player")
 
 	// API endpoints for playlist

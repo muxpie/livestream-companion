@@ -6,7 +6,7 @@ ENV GO111MODULE=on
 
 # Install git.
 # Git is required for fetching the dependencies.
-RUN apk update && apk add --no-cache git gcc musl-dev
+RUN apk update && apk add --no-cache git gcc musl-dev npm
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
@@ -22,6 +22,11 @@ COPY . .
 
 # Build the Go app
 RUN CGO_ENABLED=1 GOOS=linux go build -a -installsuffix cgo -o main .
+
+# Download all dependencies. Dependencies will be cached if the go.mod and the go.sum files are not changed 
+WORKDIR /app/mui/livestream-companion-ui
+RUN npm run build 
+RUN mv build /app/ui
 
 ######## Start a new stage from scratch #######
 FROM alpine:latest  

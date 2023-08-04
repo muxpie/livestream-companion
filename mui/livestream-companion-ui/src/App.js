@@ -130,7 +130,7 @@ function AppContent() {
   );
 
   return (
-    <Router basename='/mui'>
+    <Router basename='/ui'>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar position="fixed" sx={{backgroundImage: 'none'}}>

@@ -1,10 +1,9 @@
 import React, { useEffect, useContext,useState,  useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tooltip, Typography, Toolbar } from '@mui/material';
+import { Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tooltip, Typography } from '@mui/material';
 import { SnackbarContext } from './SnackbarContext';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import SearchIcon from '@mui/icons-material/Search';
 import PendingIcon from '@mui/icons-material/Pending';
 import InProgressIcon from '@mui/icons-material/Update';
 import AcceptIcon from '@mui/icons-material/Check';
@@ -148,13 +147,10 @@ const PlaylistTable = () => {
     navigate("/playlists/new");
   };
 
-  const handleDelete = (row) => {
-    // Handle delete action...
-  };
-
   const { openSnackbar } = useContext(SnackbarContext);
 
   return (
+    <Container>
     <Box>
       <Typography variant="h5" sx={{ marginBottom: 10, fontWeight: 'bold' }}>Playlists</Typography>
       <TableContainer component={Paper}>
@@ -201,6 +197,7 @@ const PlaylistTable = () => {
         </Fab>
       </TableContainer>
     </Box>
+    </Container>
   );
 };
 

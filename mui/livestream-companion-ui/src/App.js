@@ -23,6 +23,7 @@ import Drawer from '@mui/material/Drawer';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import { BrowserRouter as Router, Routes, Route, Link as RouterLink } from 'react-router-dom';
+import Home from './Home';
 import Playlist from './Playlist';
 import PlaylistDetail from './PlaylistDetail';
 import Category from './Category';
@@ -129,7 +130,7 @@ function AppContent() {
   );
 
   return (
-    <Router>
+    <Router basename='/mui'>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar position="fixed" sx={{backgroundImage: 'none'}}>
@@ -143,6 +144,19 @@ function AppContent() {
             >
               <MenuIcon />
             </IconButton>
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              padding: '0 15px', 
+              px: 1, 
+              ...theme.mixins.toolbar,
+              justifyContent: 'space-between',
+            }}>
+              <Typography variant="h6" noWrap component="div" sx={{ color: '#fff' }}>
+                MuxPie
+              </Typography>
+
+            </Box>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: 'flex' }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -186,10 +200,11 @@ function AppContent() {
         <Box
           margin={"20px"}
           component="main"
-          sx={{ flexGrow: 1, p: 3, ml: drawerOpen ? drawerWidth : 0 }}
+          sx={{ flexGrow: 1, ml: drawerOpen ? drawerWidth : 0 }}
         >
           <Toolbar /> {/* This is necessary to offset content below AppBar */}
           <Routes>
+            <Route path="/" element={<Home />} />
             <Route path="/playlists" element={<Playlist />} />
             <Route path="/playlists/new" element={<PlaylistDetail />} />
             <Route path="/playlists/:id" element={<PlaylistDetail />} />

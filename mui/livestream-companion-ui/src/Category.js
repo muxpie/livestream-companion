@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Box, Typography, TableContainer, Table, TableBody, Paper, TableCell, TableHead, TableRow, Toolbar, Button, TextField, Select, MenuItem, IconButton } from '@mui/material';
+import { Container, Box, Typography, TableContainer, Table, TableBody, Paper, TableCell, TableHead, TableRow, Toolbar, Button, TextField, Select, MenuItem, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
@@ -65,61 +65,63 @@ const Categories = () => {
     category.category_name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
-    <Box>
-      <div style={{ paddingBottom: '60px' }}>
-      <Typography variant="h5" sx={{ marginBottom: 10, fontWeight: 'bold' }}>Categories</Typography>
-      <Toolbar disableGutters>
-      <Select id="playlistSelect" value={selectedPlaylistId} onChange={onPlaylistSelectChange} sx={{ minWidth: 200 }}>
-        {playlists.map(playlist => (
-          <MenuItem key={playlist.ID} value={playlist.ID}>{playlist.Description}</MenuItem>
-        ))}
-      </Select>
-      <Box flexGrow={1} /> {/* This will take up any remaining space */}
-      <TextField
-        placeholder="Search..."
-        value={searchTerm}
-        onChange={e => setSearchTerm(e.target.value)}
-        InputProps={{
-          endAdornment: (
-            <IconButton>
-              <SearchIcon />
-            </IconButton>
-          ),
-        }}
-      />
-      </Toolbar>
-      <TableContainer component={Paper}>
-        <Table id="categoriesTable">
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Category Name</TableCell>
-              <TableCell>Status</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredCategories.map(category => (
-              <TableRow key={category.category_id}>
-                <TableCell>{category.category_id}</TableCell>
-                <TableCell>{category.category_name}</TableCell>
-                <TableCell>
-                  <IconButton onClick={() => onToggleActive(category)}>
-                    {category.Active ? <CheckIcon /> : <CloseIcon />}
-                  </IconButton>
-                </TableCell>
-              </TableRow>
+    <Container>
+      <Box>
+        <Box style={{ paddingBottom: '60px' }}>
+          <Typography variant="h5" sx={{ marginBottom: 10, fontWeight: 'bold' }}>Categories</Typography>
+          <Toolbar disableGutters>
+          <Select id="playlistSelect" value={selectedPlaylistId} onChange={onPlaylistSelectChange} sx={{ minWidth: 200 }}>
+            {playlists.map(playlist => (
+              <MenuItem key={playlist.ID} value={playlist.ID}>{playlist.Description}</MenuItem>
             ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      </div>
-      <AppBar position="fixed" color="default" sx={{ top: 'auto', bottom: 0 }}>
-        <Box display="flex" justifyContent="flex-end" padding={2}>
-          <Button onClick={() => onDeactivateAll(selectedPlaylistId)}>Deactivate All</Button>
-          <Button onClick={() => onActivateAll(selectedPlaylistId)}>Activate All</Button>
+          </Select>
+          <Box flexGrow={1} /> {/* This will take up any remaining space */}
+          <TextField
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <IconButton>
+                  <SearchIcon />
+                </IconButton>
+              ),
+            }}
+          />
+          </Toolbar>
+          <TableContainer component={Paper}>
+            <Table id="categoriesTable">
+              <TableHead>
+                <TableRow>
+                  <TableCell>ID</TableCell>
+                  <TableCell>Category Name</TableCell>
+                  <TableCell>Status</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredCategories.map(category => (
+                  <TableRow key={category.category_id}>
+                    <TableCell>{category.category_id}</TableCell>
+                    <TableCell>{category.category_name}</TableCell>
+                    <TableCell>
+                      <IconButton onClick={() => onToggleActive(category)}>
+                        {category.Active ? <CheckIcon /> : <CloseIcon />}
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Box>
-      </AppBar>
-    </Box>
+        <AppBar position="fixed" color="default" sx={{ top: 'auto', bottom: 0 }}>
+          <Box display="flex" justifyContent="flex-end" padding={2}>
+            <Button onClick={() => onDeactivateAll(selectedPlaylistId)}>Deactivate All</Button>
+            <Button onClick={() => onActivateAll(selectedPlaylistId)}>Activate All</Button>
+          </Box>
+        </AppBar>
+      </Box>
+    </Container>
   );
 };
 

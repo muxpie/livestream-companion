@@ -23,6 +23,8 @@ jobs:
       with:
         context: .
         push: true
-        tags: muxpie/livestream-companion:latest
+        tags: | 
+          muxpie/livestream-companion:latest
+          muxpie/livestream-companion:${{ github.run_number }}
 
 

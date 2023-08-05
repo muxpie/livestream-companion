@@ -1,6 +1,6 @@
 import React, { useEffect, useContext,useState,  useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tooltip, Typography } from '@mui/material';
+import { Grid, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tooltip, Typography } from '@mui/material';
 import { SnackbarContext } from './SnackbarContext';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -11,8 +11,10 @@ import DeclineIcon from '@mui/icons-material/Clear';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
-
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import axios from 'axios';
+
 
 const DeleteButton = ({ playlistId, onDeletion, onSnackbarOpen }) => {
   const [open, setOpen] = useState(false);
@@ -108,6 +110,9 @@ const PlaylistTable = () => {
   const [rows, setRows] = useState([]);
   const navigate = useNavigate();
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   const fetchPlaylists = async () => {
     const response = await fetch('/api/playlists');
     return response.json();
@@ -153,6 +158,35 @@ const PlaylistTable = () => {
     <Container>
     <Box>
       <Typography variant="h5" sx={{ marginBottom: 10, fontWeight: 'bold' }}>Playlists</Typography>
+      {isMobile ? (
+        <Grid container spacing={2} >
+          {rows.map((row) => (
+            <Grid item xs={12} key={row.ID} >
+              <Paper
+                sx={{
+                  padding: 2,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  marginBottom: 1,
+                }}
+              >
+                <Grid container spacing={1} sx={{ margin: [0, 0, 0, 0] }}>
+                  <Grid item xs={12}>{row.ID}: {row.Description}</Grid>
+                  <Grid item xs={6}>Type: {row.Type}</Grid>
+                  <Grid item xs={12}>Import Status: <ImportStatusButton importStatus={row.ImportStatus} /></Grid>
+                  <Grid item xs={12}>EPG Status: <EPGStatusButton epgStatus={row.EpgStatus} /></Grid>
+                  <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <IconButton color="primary" onClick={() => handleEdit(row.ID)}>
+                      <EditIcon />
+                    </IconButton>
+                    <DeleteButton playlistId={row.ID} onDeletion={refreshPlaylists} onSnackbarOpen={handleDeletion} />
+                  </Grid>
+                </Grid>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+      ) : (
       <TableContainer component={Paper}>
         <Table >
           <TableHead>
@@ -196,6 +230,7 @@ const PlaylistTable = () => {
           <AddIcon />
         </Fab>
       </TableContainer>
+      )}
     </Box>
     </Container>
   );

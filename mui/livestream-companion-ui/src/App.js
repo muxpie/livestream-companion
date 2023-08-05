@@ -68,6 +68,8 @@ function AppContent() {
   const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
   const [drawerOpen, setDrawerOpen] = useState(true);
   const { openSnackbar } = useContext(SnackbarContext);
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
 
   const onCopyServerAddress = useCallback(() => {
     const serverAddress = window.location.origin;
@@ -95,31 +97,44 @@ function AppContent() {
         ...theme.mixins.toolbar,
         justifyContent: 'space-between',
       }}>
-        <Typography variant="h6" noWrap component="div" sx={{ color: '#fff' }}>
-          MuxPie
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography variant="h6" noWrap component="div" sx={{ color: '#fff', fontSize: '1.6rem', marginRight: 10 }}>
+            MuxPie
+          </Typography>
+          <Box sx={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+          }}>
+            <Typography variant="body2" noWrap component="div" sx={{ color: '#fff', fontSize: '0.7rem' }}>
+              Livestream
+            </Typography>
+            <Typography variant="body2" noWrap component="div" sx={{ color: '#fff', fontSize: '0.7rem' }}>
+              Companion
+            </Typography>
+          </Box>
+        </Box>
 
       </Box>
       <List>
-        <ListItem button component={RouterLink} to="/">
+        <ListItem button component={RouterLink} to="/" onClick={handleDrawerToggle}>
           <ListItemIcon>
             <HomeIcon color="primary" />
           </ListItemIcon>
           <ListItemText primary="Home" />
         </ListItem>
-        <ListItem button component={RouterLink} to="/playlists">
+        <ListItem button component={RouterLink} to="/playlists" onClick={handleDrawerToggle}>
           <ListItemIcon>
             <ListIcon color="primary" />
           </ListItemIcon>
           <ListItemText primary="Playlists" />
         </ListItem>
-        <ListItem button component={RouterLink} to="/categories">
+        <ListItem button component={RouterLink} to="/categories" onClick={handleDrawerToggle}>
           <ListItemIcon>
             <CategoryIcon color="primary" />
           </ListItemIcon>
           <ListItemText primary="Categories" />
         </ListItem>
-        <ListItem button component={RouterLink} to="/channels">
+        <ListItem button component={RouterLink} to="/channels" onClick={handleDrawerToggle}>
           <ListItemIcon>
             <TvIcon color="primary" />
           </ListItemIcon>
@@ -152,15 +167,34 @@ function AppContent() {
               ...theme.mixins.toolbar,
               justifyContent: 'space-between',
             }}>
-              <Typography variant="h6" noWrap component="div" sx={{ color: '#fff' }}>
-                MuxPie
-              </Typography>
-
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                {!isMobile ? (
+                  <Typography variant="h6" noWrap component="div" sx={{ color: '#fff', fontSize: '1.6rem', marginRight: 10 }}>
+                    MuxPie
+                  </Typography>  
+                ) : <></> }
+                
+                <Box sx={{ 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                }}>
+                  <Typography variant="body2" noWrap component="div" sx={{ color: '#fff', fontSize: '0.7rem' }}>
+                    Livestream
+                  </Typography>
+                  <Typography variant="body2" noWrap component="div" sx={{ color: '#fff', fontSize: '0.7rem' }}>
+                    Companion
+                  </Typography>
+                </Box>
+              </Box>
             </Box>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: 'flex' }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography variant="body1" sx={{ marginRight: 1 }}>Server Address:</Typography>
+                {isMobile ? (
+                  <Typography variant="body1" sx={{ marginRight: 1 }}>Server:</Typography>
+                ):(
+                  <Typography variant="body1" sx={{ marginRight: 1 }}>Server Address:</Typography>
+                )}
                 <Tooltip title="Copy Server Address">
                   <IconButton color="inherit" onClick={onCopyServerAddress}>
                     <FileCopyIcon />
@@ -168,7 +202,11 @@ function AppContent() {
                 </Tooltip>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography variant="body1" sx={{ marginRight: 1 }}>XMLTV Address:</Typography>
+                {isMobile ? (
+                  <Typography variant="body1" sx={{ marginRight: 1 }}>XMLTV:</Typography>
+                ):(
+                  <Typography variant="body1" sx={{ marginRight: 1 }}>XMLTV Address:</Typography>
+                )}
                 <Tooltip title="Copy XMLTV Link Address">
                   <IconButton color="inherit" onClick={onCopyXmltvLink}>
                     <FileCopyIcon />
@@ -187,6 +225,7 @@ function AppContent() {
             '& .MuiDrawer-paper': { 
               width: drawerWidth, 
               boxSizing: 'border-box',
+              backgroundImage: 'none !important',
             },
             width: drawerWidth,
             flexShrink: 0,

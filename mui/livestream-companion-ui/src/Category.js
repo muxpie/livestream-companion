@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Container, Box, Typography, TableContainer, Table, TableBody, Paper, TableCell, TableHead, TableRow, Toolbar, Button, TextField, Select, MenuItem, IconButton } from '@mui/material';
+import { Grid, Container, Box, Typography, TableContainer, Table, TableBody, Paper, TableCell, TableHead, TableRow, Toolbar, Button, TextField, Select, MenuItem, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import AppBar from '@mui/material/AppBar';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import axios from 'axios';
 
 const Categories = () => {
@@ -11,6 +13,8 @@ const Categories = () => {
   const [selectedPlaylistId, setSelectedPlaylistId] = useState('');
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     axios.get('/api/playlists').then(response => {
@@ -70,49 +74,90 @@ const Categories = () => {
         <Box style={{ paddingBottom: '60px' }}>
           <Typography variant="h5" sx={{ marginBottom: 10, fontWeight: 'bold' }}>Categories</Typography>
           <Toolbar disableGutters>
-          <Select id="playlistSelect" value={selectedPlaylistId} onChange={onPlaylistSelectChange} sx={{ minWidth: 200 }}>
-            {playlists.map(playlist => (
-              <MenuItem key={playlist.ID} value={playlist.ID}>{playlist.Description}</MenuItem>
-            ))}
-          </Select>
-          <Box flexGrow={1} /> {/* This will take up any remaining space */}
-          <TextField
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-            InputProps={{
-              endAdornment: (
-                <IconButton>
-                  <SearchIcon />
-                </IconButton>
-              ),
-            }}
-          />
+            <Grid container direction="row" spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Select 
+                  id="playlistSelect" 
+                  value={selectedPlaylistId} 
+                  onChange={onPlaylistSelectChange} 
+                  sx={{ width: '100%' }}
+                >
+                  {playlists.map(playlist => (
+                    <MenuItem key={playlist.ID} value={playlist.ID}>{playlist.Description}</MenuItem>
+                  ))}
+                </Select>
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField 
+                  placeholder="Search..." 
+                  value={searchTerm} 
+                  onChange={e => setSearchTerm(e.target.value)} 
+                  fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton>
+                      <SearchIcon />
+                    </IconButton>
+                    ),
+                  }}
+                />
+              </Grid>
+            </Grid>
           </Toolbar>
-          <TableContainer component={Paper}>
-            <Table id="categoriesTable">
-              <TableHead>
-                <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell>Category Name</TableCell>
-                  <TableCell>Status</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredCategories.map(category => (
-                  <TableRow key={category.category_id}>
-                    <TableCell>{category.category_id}</TableCell>
-                    <TableCell>{category.category_name}</TableCell>
-                    <TableCell>
-                      <IconButton onClick={() => onToggleActive(category)}>
-                        {category.Active ? <CheckIcon /> : <CloseIcon />}
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
+
+          {isMobile ? (
+            <Box sx={{marginTop: 15}}>
+              <Grid container spacing={2} >
+                {filteredCategories.map((category) => (
+                  <Grid item xs={12} key={category.ID} >
+                    <Paper
+                      sx={{
+                        padding: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        marginBottom: 1,
+                      }}
+                    >
+                      <Grid container spacing={1} sx={{ margin: [0, 0, 0, 0] }}>
+                        <Grid item xs={12}>{category.category_id}: {category.category_name}</Grid>
+                        <Grid item xs={12}>Status:
+                          <IconButton onClick={() => onToggleActive(category)}>
+                              {category.Active ? <CheckIcon /> : <CloseIcon />}
+                          </IconButton>
+                        </Grid>
+                      </Grid>
+                    </Paper>
+                  </Grid>
                 ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+              </Grid>
+            </Box>
+          ) : (
+            <TableContainer component={Paper}>
+              <Table id="categoriesTable">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell>Category Name</TableCell>
+                    <TableCell>Status</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredCategories.map(category => (
+                    <TableRow key={category.category_id}>
+                      <TableCell>{category.category_id}</TableCell>
+                      <TableCell>{category.category_name}</TableCell>
+                      <TableCell>
+                        <IconButton onClick={() => onToggleActive(category)}>
+                          {category.Active ? <CheckIcon /> : <CloseIcon />}
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
         </Box>
         <AppBar position="fixed" color="default" sx={{ top: 'auto', bottom: 0 }}>
           <Box display="flex" justifyContent="flex-end" padding={2}>

@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Box, TextField, Select, MenuItem, Checkbox, FormControl, InputLabel, Button, FormControlLabel, Typography } from '@mui/material';
+import { Alert, Box, TextField, Select, MenuItem, Checkbox, FormControl, InputLabel, Button, FormControlLabel, Typography } from '@mui/material';
 import { Grid } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -164,7 +164,11 @@ const PlaylistDetail = ({ onSnackbarOpen }) => {
               }
               label="Restream"
             />
-            <Typography variant="body2" color="text.secondary">Restream enhances compatibility by transforming the stream into the format recognized by Plex and Emby, so it's generally advisable to keep it activated.</Typography>
+            <Alert severity="info">
+              Restream enhances compatibility by transforming the stream into the format recognized by Plex and Emby, so it's generally advisable to keep it activated.
+            </Alert>
+            <Box sx={{ marginTop: 2 }}>
+          </Box>
           </Grid>
   
           <Grid item xs={12}>

@@ -49,9 +49,6 @@ COPY --from=builder /app/main .
 # Copy the UI folder from your source to the current location in the image
 COPY --from=builder /app/ui ./ui
 
-# Copy the player folder from your source to the current location in the image
-COPY --from=builder /app/player ./player
-
 # Expose port 5004 to the outside world
 EXPOSE 5004
 

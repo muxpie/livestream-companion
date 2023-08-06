@@ -58,7 +58,7 @@ function Home() {
         </Typography>
         <Box sx={{ marginTop: 2 }}>
           <Alert severity="warning">
-            Disclaimer: As a user of MuxPie LiveStream Companion, it is your responsibility to ensure the legality of your streams. Please verify that your providers rightfully own the content you're streaming. MuxPie LiveStream Companion is not responsible for the source of your streams and assumes that all users uphold the highest standard of integrity with regard to copyright and content ownership laws.
+            Disclaimer: While MuxPie LiveStream Companion makes it easy to stream content, we strongly advocate for the respect of copyright laws. It is your responsibility to ensure that any content you stream is legally permissible and done only for your own usage and that your content providers have the appropriate rights to the content they are providing.
           </Alert>
         </Box>
       </Paper>

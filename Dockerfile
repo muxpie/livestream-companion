@@ -27,6 +27,7 @@ RUN CGO_ENABLED=1 GOOS=linux go build -a -installsuffix cgo -o main .
 WORKDIR /app/mui/livestream-companion-ui
 RUN npm install
 RUN npm run build 
+RUN rm -Rf /app/ui
 RUN mv build /app/ui
 
 ######## Start a new stage from scratch #######
